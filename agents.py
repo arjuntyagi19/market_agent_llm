@@ -6,7 +6,7 @@ from tools import tool
 import asyncio
 
 # Directly assign the Google API key
-google_api_key = "AIzaSyBuZpjBAhJ2dujzRRaJZGviLEhrEbAd5Fg"
+google_api_key = ""
 
 try:
     loop = asyncio.get_running_loop()
