@@ -1,10 +1,11 @@
-from dotenv import load_dotenv
 from crewai_tools import SerperDevTool
 import os
-load_dotenv()
 
+# Directly assign the API key
+serper_api_key = ""
 
-os.environ["SERPER_API_KEY"]=os.environ.get("SERPER_API_KEY")
+# Assign the SERPER_API_KEY to the environment
+os.environ["SERPER_API_KEY"] = serper_api_key
 
-#Tool for searching on Google
-tool=SerperDevTool()
+# Tool for searching on Google
+tool = SerperDevTool()

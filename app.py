@@ -1,10 +1,10 @@
 import streamlit as st
 import re
 import sys
-from crewai import Crew,Process
+from crewai import Crew, Process
 import os
-from agents import reporting_analyst,market_research_analyst,financial_analyst
-from tasks import reporting_analysis,market_analysis,financial_analysis
+from agents import reporting_analyst, market_research_analyst, financial_analyst
+from tasks import reporting_analysis, market_analysis, financial_analysis
 
 # Used to stream sys output on the streamlit frontend
 class StreamToContainer:
@@ -45,37 +45,31 @@ class StreamToContainer:
 
         self.buffer.append(cleaned_data)
         if "\n" in data:
-            self.container.markdown(''.join(self.buffer) , unsafe_allow_html=True)
+            self.container.markdown(''.join(self.buffer), unsafe_allow_html=True)
             self.buffer = []
-    
 
-
-
+# Streamlit UI
 st.header("Financial & Market Research Multi-Agent")
-st.subheader("Generate a Financial and Market Research Analysis Report!",divider="rainbow",anchor=False)
+st.subheader("Generate a Financial and Market Research Analysis Report!", divider="rainbow", anchor=False)
 
 with st.form("form"):
-    company=st.text_input("Enter the name of the Company",key="company")
-    submitted=st.form_submit_button("Submit")
+    company = st.text_input("Enter the name of the Company", key="company")
+    submitted = st.form_submit_button("Submit")
 
-
-    
 if submitted:
-    with st.status("🤖 **Agents at work...**",expanded=True,state="running") as status:
+    with st.status("🤖 **Agents at work...**", expanded=True, state="running") as status:
         with st.container(height=300):
             sys.stdout = StreamToContainer(st)
-            #Defining the crew comprising of different agents
+            # Defining the crew comprising of different agents
             crew = Crew(
-            agents=[financial_analyst, market_research_analyst, reporting_analyst],
-            tasks=[financial_analysis,market_analysis,reporting_analysis],
-            process=Process.sequential,
-            verbose=2)
-            result=crew.kickoff(inputs={"company":company})
-        
+                agents=[financial_analyst, market_research_analyst, reporting_analyst],
+                tasks=[financial_analysis, market_analysis, reporting_analysis],
+                process=Process.sequential,
+                verbose=True  # Ensure verbose is a boolean (True or False)
+            )
+            result = crew.kickoff(inputs={"company": company})
 
+        status.update(label="✅ Your Report is ready", state="complete", expanded=False) 
 
-        status.update(label="✅ Your Report is ready",state="complete", expanded=False) 
     st.subheader("Financial and Market Research Report is ready!", anchor=False, divider="rainbow")
     st.markdown(result)
-
-
